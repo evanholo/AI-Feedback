@@ -1,0 +1,3359 @@
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/ampmclock/AMPMClock.html:
+
+HOUR_MODEL is integer
+ exemplar h
+ constraint 1 <= h <= 12
+
+MINUTE_SECOND_MODEL is integer
+ exemplar m
+ constraint 0 <= m <= 59
+
+AM_PM_CLOCK_MODEL is (
+  hours:   HOUR_MODEL
+  minutes: MINUTE_SECOND_MODEL
+  seconds: MINUTE_SECOND_MODEL
+  am:      boolean
+ )
+
+type AMPMClock is modeled by AM_PM_CLOCK_MODEL
+
+():
+ ensures
+  this.hours = 12 and
+  this.minutes = 0 and
+  this.seconds = 0 and
+  this.am = true
+(int h, int m, int s, boolean a):
+ requires
+  1 <= h <= 12 and
+  0 <= m <= 59 and
+  0 <= s <= 59
+ ensures
+  this.hours = h and
+  this.minutes = m and
+  this.seconds = s and
+  this.am = a
+
+1 <= newHours <= 12
+this.hours = newHours
+0 <= newMinutes <= 59
+this.minutes = newMinutes
+0 <= newSeconds <= 59
+this.seconds = newSeconds
+this.am = am
+hours = this.hours
+minutes = this.minutes
+seconds = this.seconds
+isAM = this.am
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTree.html:
+this /= empty_tree
+there exists left, right: binary tree of T
+    (this = compose(root, left, right))
+this /= empty_tree
+there exists left, right: binary tree of T
+    (#this = compose(replaceRoot, left, right)  and
+     this = compose(x, left, right))
+height = ht(this)
+IN_ORDER(this) = IN_ORDER(compose(root, #left, #right))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTree1.html:
+TREE_REP is  (
+  size: integer,
+  height: integer,
+  rootLabel: T,
+  leftSubtree: TREE_REP,
+  rightSubtree: TREE_REP
+ )
+
+IS_LEGAL_REP (
+  tr: TREE_REP
+ ): boolean is
+ 0 <= tr.height <= tr.size <= (2^tr.height - 1)  and
+ (if tr.size > 0 then
+  tr.size = 1 + tr.leftSubtree.size + tr.rightSubtree.size  and
+  tr.height = 1 + max(tr.leftSubtree.height, tr.rightSubtree.height)  and
+  [tr.rootLabel is not null]  and
+  [tr.leftSubtree is not null]  and
+  [tr.rightSubtree is not null]  and
+  [tr.leftSubtree and tr.rightSubtree are not aliases]  and
+  IS_LEGAL_REP(tr.leftSubtree)  and
+  IS_LEGAL_REP(tr.rightSubtree))
+
+ABSTRACT_TREE (
+  tr: TREE_REP
+ ): binary tree of T satisfies
+ if IS_LEGAL_REP(tr) then
+  (if tr.size = 0
+   then ABSTRACT_TREE(tr) = empty_tree
+   else ABSTRACT_TREE(tr) =
+        compose(tr.rootLabel, ABSTRACT_TREE(tr.leftSubtree),
+                ABSTRACT_TREE(tr.rightSubtree)))
+
+IS_LEGAL_REP($this)
+this = ABSTRACT_TREE($this)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTreeKernel.html:
+
+IN_ORDER(
+  tree: binary tree of T
+ ): string of T satisfies
+ if tree = empty_tree
+  then IN_ORDER(tree) = <>
+  else there exists root: T, left, right: binary tree of T
+        (tree = compose(root, left, right) and
+         IN_ORDER(tree) = IN_ORDER(left) * <root> * IN_ORDER(right))
+
+type BinaryTreeKernel is modeled by binary tree of T
+():
+ ensures
+  this = empty_tree
+~this.seen * ~this.unseen = IN_ORDER(this)
+this = compose(root, #left, #right)
+this /= empty_tree
+#this = compose(disassemble, left, right)
+size = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTreeSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/List.html:
+this.right /= <>
+<rightFront> is prefix of this.right
+this.right /= <>
+
+<replaceRightFront> is prefix of #this.right  and
+this.right = <x> * #this.right[1, |#this.right|)
+
+this.left = #this.left * #this.right and |this.right| = 0
+this.left /= <>
+this.left * this.right = #this.left * #this.right  and
+|this.left| = |#this.left| - 1
+this.left = #this.left  and  list.left = #list.left  and
+this.right = #list.right  and  list.right = #this.right
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/List1L.html:
+this.left = [$this.leftList, based on java.util.List's "proper sequence"]  and
+this.right = [$this.rightList, based on java.util.List's "proper sequence"]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html:
+
+     String[] y = x.toArray(new String[0]);
+ 
+
+     final ListIterator<E> li = list.listIterator();
+     while (li.hasNext()) {
+         li.set(operator.apply(li.next()));
+     }
+ 
+
+     int hashCode = 1;
+     for (E e : list)
+         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+ 
+
+      list.subList(from, to).clear();
+ 
+
+     String[] array = ... ;
+     List<String[]> list = List.<String[]>of(array);
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/List2.html:
+$this.leftLength >= 0  and
+[$this.rightLength >= 0] and
+[$this.preStart is not null]  and
+[$this.lastLeft is not null]  and
+[$this.finish is not null]  and
+[$this.preStart points to the first node of a singly linked list
+ containing $this.leftLength + $this.rightLength + 1 nodes]  and
+[$this.lastLeft points to the ($this.leftLength + 1)-th node in
+ that singly linked list]  and
+[$this.finish points to the last node in that singly linked list]  and
+[$this.finish.next is null]
+this =
+ ([data in nodes starting at $this.preStart.next and running through
+   $this.lastLeft],
+  [data in nodes starting at $this.lastLeft.next and running through
+   $this.finish])
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/List3.html:
+$this.leftLength >= 0  and
+[$this.rightLength >= 0] and
+[$this.preStart is not null]  and
+[$this.lastLeft is not null]  and
+[$this.postFinish is not null]  and
+[$this.preStart points to the first node of a doubly linked list
+ containing ($this.leftLength + $this.rightLength + 2) nodes]  and
+[$this.lastLeft points to the ($this.leftLength + 1)-th node in
+ that doubly linked list]  and
+[$this.postFinish points to the last node in that doubly linked list]  and
+[for every node n in the doubly linked list of nodes, except the one
+ pointed to by $this.preStart, n.previous.next = n]  and
+[for every node n in the doubly linked list of nodes, except the one
+ pointed to by $this.postFinish, n.next.previous = n]
+this =
+ ([data in nodes starting at $this.preStart.next and running through
+   $this.lastLeft],
+  [data in nodes starting at $this.lastLeft.next and running through
+   $this.postFinish.previous])
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/ListKernel.html:
+LIST_MODEL is (
+  left: string of T,
+  right: string of T
+ )
+type ListKernel is modeled by LIST_MODEL
+
+():
+ ensures
+  this = (<>, <>)
+
+~this.seen * ~this.unseen = this.left * this.right
+this.right = <x> * #this.right
+this.right /= <>
+#this.right = <removeRightFront> * this.right
+this.right /= <>
+this.left * this.right = #this.left * #this.right  and
+|this.left| = |#this.left| + 1
+this.right = #this.left * #this.right and |this.left| = 0
+leftLength = |this.left|
+rightLength = |this.right|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/list/ListSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map.html:
+RANGE(
+  m: PARTIAL_FUNCTION
+ ): finite set of V satisfies
+ for all value: V (value is in RANGE(m) iff
+  there exists key: K ((key, value) is in m))
+key is in DOMAIN(this)
+this = (#this \ {(key, replaceValue)}) union {(key, value)}  and
+(key, replaceValue) is in #this
+value is in RANGE(this)
+(key, value) is in this
+hasValue = (value is in RANGE(this))
+sharesKeyWith = (DOMAIN(this) intersection DOMAIN(m) /= {})
+DOMAIN(this) intersection DOMAIN(m) = {}
+this = #this union #m
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map.Pair.html:
+type Pair is modeled by (key: K, value: V)
+(K key, V value):
+ ensures
+  this = (key, value)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map1L.html:
+this = [value of $this]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html:
+ 
+ for (Map.Entry<K, V> entry : map.entrySet())
+     action.accept(entry.getKey(), entry.getValue());
+ 
+ 
+ for (Map.Entry<K, V> entry : map.entrySet())
+     entry.setValue(function.apply(entry.getKey(), entry.getValue()));
+ 
+ 
+ V v = map.get(key);
+ if (v == null)
+     v = map.put(key, value);
+
+ return v;
+ 
+ 
+ if (map.containsKey(key) && Objects.equals(map.get(key), value)) {
+     map.remove(key);
+     return true;
+ } else
+     return false;
+ 
+ 
+ if (map.containsKey(key) && Objects.equals(map.get(key), oldValue)) {
+     map.put(key, newValue);
+     return true;
+ } else
+     return false;
+ 
+ 
+ if (map.containsKey(key)) {
+     return map.put(key, value);
+ } else
+     return null;
+ 
+ 
+ map.computeIfAbsent(key, k -> new Value(f(k)));
+ 
+ 
+ map.computeIfAbsent(key, k -> new HashSet<V>()).add(v);
+ 
+ 
+ if (map.get(key) == null) {
+     V newValue = mappingFunction.apply(key);
+     if (newValue != null)
+         map.put(key, newValue);
+ }
+ 
+ 
+ if (map.get(key) != null) {
+     V oldValue = map.get(key);
+     V newValue = remappingFunction.apply(key, oldValue);
+     if (newValue != null)
+         map.put(key, newValue);
+     else
+         map.remove(key);
+ }
+ 
+ 
+ map.compute(key, (k, v) -> (v == null) ? msg : v.concat(msg))
+ 
+ V oldValue = map.get(key);
+ V newValue = remappingFunction.apply(key, oldValue);
+ if (newValue != null) {
+     map.put(key, newValue);
+ } else if (oldValue != null || map.containsKey(key)) {
+     map.remove(key);
+ }
+ return newValue;
+ 
+ 
+ map.merge(key, msg, String::concat)
+ 
+ 
+ V oldValue = map.get(key);
+ V newValue = (oldValue == null) ? value :
+              remappingFunction.apply(oldValue, value);
+ if (newValue == null)
+     map.remove(key);
+ else
+     map.put(key, newValue);
+ 
+
+     import static java.util.Map.entry;
+
+     Map<Integer,String> map = Map.ofEntries(
+         entry(1, "a"),
+         entry(2, "b"),
+         entry(3, "c"),
+         ...
+         entry(26, "z"));
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map2.html:
+
+for all key1, key2: K, value1, value2: V, str1, str2: string of (key, value)
+    where (str1 * <(key1, value1)> is prefix of $this.pairsQueue and
+           str2 * <(key2, value2)> is prefix of $this.pairsQueue and
+           str1 /= str2)
+  (key1 /= key2)
+
+this = entries($this.pairsQueue)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map3.html:
+IS_TOTAL_PREORDER (
+  r: binary relation on K
+ ) : boolean is
+ for all x, y, z: K
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_BST(
+  tree: binary tree of (K, V),
+  r: binary relation on K
+ ): boolean satisfies
+ [tree satisfies the binary search tree ordering property according to the
+  relation r on the keys of its (K, V) labels and has no duplicate key
+  values among its (K, V) labels]
+IS_TOTAL_PREORDER([relation computed by $this.order.compare method]  and
+IS_BST($this.pairsTree, $this.order)
+this = labels($this.pairsTree)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTree.html:
+this /= empty_tree
+there exists left, right: binary tree of T
+    (this = compose(root, left, right))
+this /= empty_tree
+there exists left, right: binary tree of T
+    (#this = compose(replaceRoot, left, right)  and
+     this = compose(x, left, right))
+height = ht(this)
+IN_ORDER(this) = IN_ORDER(compose(root, #left, #right))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map4.html:
+
+|$this.hashTable| > 0  and
+for all i: integer, pf: PARTIAL_FUNCTION, x: K
+    where (0 <= i  and  i < |$this.hashTable|  and
+           <pf> = $this.hashTable[i, i+1)  and
+           x is in DOMAIN(pf))
+  ([computed result of x.hashCode()] mod |$this.hashTable| = i)  and
+for all i: integer
+    where (0 <= i  and  i < |$this.hashTable|)
+  ([entry at position i in $this.hashTable is not null])  and
+$this.size = sum i: integer, pf: PARTIAL_FUNCTION
+    where (0 <= i  and  i < |$this.hashTable|  and
+           <pf> = $this.hashTable[i, i+1))
+  (|pf|)
+
+
+this = union i: integer, pf: PARTIAL_FUNCTION
+           where (0 <= i  and  i < |$this.hashTable|  and
+                  <pf> = $this.hashTable[i, i+1))
+         (pf)
+
+hashTableSize > 0
+this = {}
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map.html:
+RANGE(
+  m: PARTIAL_FUNCTION
+ ): finite set of V satisfies
+ for all value: V (value is in RANGE(m) iff
+  there exists key: K ((key, value) is in m))
+key is in DOMAIN(this)
+this = (#this \ {(key, replaceValue)}) union {(key, value)}  and
+(key, replaceValue) is in #this
+value is in RANGE(this)
+(key, value) is in this
+hasValue = (value is in RANGE(this))
+sharesKeyWith = (DOMAIN(this) intersection DOMAIN(m) /= {})
+DOMAIN(this) intersection DOMAIN(m) = {}
+this = #this union #m
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/MapKernel.html:
+PARTIAL_FUNCTION is finite set of (key: K, value: V)
+ exemplar m
+ constraint
+  for all key1, key2: K, value1, value2: V
+    where ((key1, value1) is in m  and  (key2, value2) is in m)
+   (if key1 = key2 then value1 = value2)
+DOMAIN(
+  m: PARTIAL_FUNCTION
+ ): finite set of K satisfies
+ for all key: K (key is in DOMAIN(m) iff
+  there exists value: V ((key, value) is in m))
+type MapKernel is modeled by PARTIAL_FUNCTION
+():
+ ensures
+  this = {}
+entries(~this.seen * ~this.unseen) = this  and
+|~this.seen * ~this.unseen| = |this|
+key is not in DOMAIN(this)
+this = #this union {(key, value)}
+key is in DOMAIN(this)
+remove.key = key  and
+remove is in #this  and
+this = #this \ {remove}
+|this| > 0
+removeAny is in #this and
+this = #this \ {removeAny}
+key is in DOMAIN(this)
+(key, value) is in this
+hasKey = (key is in DOMAIN(this))
+size = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/MapSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/MapSecondary.SimplePair.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumber.html:
+i >= 0
+this = i
+canConvertToInt = (this <= Integer.MAX_VALUE)
+this <= Integer.MAX_VALUE
+toInt = this
+canConvertToNatural = there exists n: NATURAL (s = TO_STRING(n))
+there exists n: NATURAL (s = TO_STRING(n))
+s = TO_STRING(this)
+this = n
+this = #this + 1
+this > 0
+this = #this - 1
+this = #this + n
+this >= n
+this = #this - n
+this = #this * n
+n > 0
+
+#this = this * n + divide  and
+0 <= divide < n
+
+p >= 0
+this = #this ^ (p)
+r >= 2
+this ^ (r) <= #this < (this + 1) ^ (r)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumber1L.html:
+$this.rep >= 0
+this = $this.rep
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigInteger.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumber2.html:
+
+HAS_ONLY_DIGITS (
+  s: string of integer
+ ): boolean satisfies
+ if s = empty_string
+  then HAS_ONLY_DIGITS (s) = true
+  else for all a: string of integer, k: integer where (s = a * <k>)
+        (HAS_ONLY_DIGITS (s) = (HAS_ONLY_DIGITS (a)  and  0 <= k < 10))
+
+IS_WELL_FORMED_RADIX_REPRESENTATION (
+  s: string of integer
+ ): boolean is
+ s = empty_string  or
+     there exists k: integer, a: string of integer
+      (s = <k> * a  and
+       1 <= k < 10  and
+       HAS_ONLY_DIGITS (a))
+
+NUMERICAL_VALUE (
+  s: string of integer
+ ): integer satisfies
+ if s = empty_string
+  then NUMERICAL_VALUE (s) = 0
+  else for all a: string of integer, k: integer where (s = a * <k>)
+        (NUMERICAL_VALUE (s) = NUMERICAL_VALUE (a) * 10 + k)
+
+REVERSED_STRING_OF_DIGITS (
+  n: NATURAL
+ ): string of integer satisfies
+ if n = 0
+ then REVERSED_STRING_OF_DIGITS (n) = empty_string
+ else REVERSED_STRING_OF_DIGITS (n) = <n mod 10> * REVERSED_STRING_OF_DIGITS (n / 10)
+
+IS_WELL_FORMED_RADIX_REPRESENTATION (rev($this.digits))
+this = NUMERICAL_VALUE (rev($this.digits))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack.html:
+this /= <>
+<top> is prefix of this
+this /= <>
+
+<replaceTop> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = rev(#this)
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html:
+
+ parseInt("0", 10) returns 0
+ parseInt("473", 10) returns 473
+ parseInt("+42", 10) returns 42
+ parseInt("-0", 10) returns 0
+ parseInt("-FF", 16) returns -255
+ parseInt("1100110", 2) returns 102
+ parseInt("2147483647", 10) returns 2147483647
+ parseInt("-2147483648", 10) returns -2147483648
+ parseInt("2147483648", 10) throws a NumberFormatException
+ parseInt("99", 8) throws a NumberFormatException
+ parseInt("Kona", 10) throws a NumberFormatException
+ parseInt("Kona", 27) returns 411787
+ 
+
+ Integer result = getInteger(nm, null);
+ return (result == null) ? Integer.valueOf(val) : result;
+ 
+
+    Integer.valueOf(x).compareTo(Integer.valueOf(y))
+ 
+// Compressing drink to food
+compress(0xCAFEBABE, 0xFF00FFF0) == 0xCABAB
+
+// Returns 1 if the bit at position n is one
+compress(x, 1 << n) == (x >> n & 1)
+
+// Logical shift right
+compress(x, -1 << n) == x >>> n
+
+// Any bits not covered by the mask are ignored
+compress(x, m) == compress(x & m, m)
+
+// Compressing a value by itself
+compress(m, m) == (m == -1 || m == 0) ? m : (1 << bitCount(m)) - 1
+
+// Expanding then compressing with the same mask
+compress(expand(x, m), m) == x & compress(m, m)
+
+int compressLeft(int i, int mask) {
+    // This implementation follows the description in Hacker's Delight which
+    // is informative. A more optimal implementation is:
+    //   Integer.compress(i, mask) << -Integer.bitCount(mask)
+    return Integer.reverse(
+        Integer.compress(Integer.reverse(i), Integer.reverse(mask)));
+}
+
+int sag(int i, int mask) {
+    return compressLeft(i, mask) | Integer.compress(i, ~mask);
+}
+
+// Separate the sheep from the goats
+sag(0xCAFEBABE, 0xFF00FFF0) == 0xCABABFEE
+
+expand(0x0000CABAB, 0xFF00FFF0) == 0xCA00BAB0
+
+// Logically shift right the bit at position 0
+expand(x, 1 << n) == (x & 1) << n
+
+// Logically shift right
+expand(x, -1 << n) == x << n
+
+// Expanding all bits returns the mask
+expand(-1, m) == m
+
+// Any bits not covered by the mask are ignored
+expand(x, m) == expand(x, m) & m
+
+// Compressing then expanding with the same mask
+expand(compress(x, m), m) == x & m
+
+int select(int i, int n) {
+    // the one-bit in i (the mask) with index n
+    int nthBit = Integer.expand(1 << n, i);
+    // the bit position of the one-bit with index n
+    return Integer.numberOfTrailingZeros(nthBit);
+}
+
+// The one-bit with index 0 is at bit position 1
+select(0b10101010_10101010, 0) == 1
+// The one-bit with index 3 is at bit position 7
+select(0b10101010_10101010, 3) == 7
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumber3.html:
+[all characters of $this.rep are '0' through '9']  and
+[$this.rep does not start with '0']
+this = [if $this.rep = "" then 0
+        else the decimal number whose ordinary depiction is $this.rep]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html:
+
+     String str = "abc";
+ 
+
+     char data[] = {'a', 'b', 'c'};
+     String str = new String(data);
+ 
+
+     System.out.println("abc");
+     String cde = "cde";
+     System.out.println("abc" + cde);
+     String c = "abc".substring(2, 3);
+     String d = cde.substring(1, 2);
+ 
+
+     c == (char)(((hibyte & 0xff) << 8)
+                         | (b & 0xff))
+ 
+
+     dstBegin + (srcEnd-srcBegin) - 1
+ 
+
+     dstBegin + (srcEnd-srcBegin) - 1
+ 
+
+ this.charAt(k)-anotherString.charAt(k)
+ 
+
+ this.length()-anotherString.length()
+ 
+
+          this.substring(toffset).startsWith(prefix)
+          
+
+ s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+ 
+
+ this.charAt(k) == ch
+ 
+
+ this.codePointAt(k) == ch
+ 
+
+ (this.charAt(k) == ch) && (k >= fromIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (k >= fromIndex)
+ 
+
+ (this.charAt(k) == ch) && (beginIndex <= k < endIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (beginIndex <= k < endIndex)
+ 
+
+ this.charAt(k) == ch
+ 
+
+ this.codePointAt(k) == ch
+ 
+
+ (this.charAt(k) == ch) && (k <= fromIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (k <= fromIndex)
+ 
+
+ this.startsWith(str, k)
+ 
+
+     k >= Math.min(fromIndex, this.length()) &&
+                   this.startsWith(str, k)
+ 
+
+     s.substring(beginIndex, endIndex).indexOf(str) + beginIndex
+ 
+
+ this.startsWith(str, k)
+ 
+
+     k <= Math.min(fromIndex, this.length()) &&
+                   this.startsWith(str, k)
+ 
+
+ "unhappy".substring(2) returns "happy"
+ "Harbison".substring(3) returns "bison"
+ "emptiness".substring(9) returns "" (an empty string)
+ 
+
+ "hamburger".substring(4, 8) returns "urge"
+ "smiles".substring(1, 5) returns "mile"
+ 
+
+ str.subSequence(begin, end)
+
+ str.substring(begin, end)
+
+ "cares".concat("s") returns "caress"
+ "to".concat("get").concat("her") returns "together"
+ 
+
+ "mesquite in your cellar".replace('e', 'o')
+         returns "mosquito in your collar"
+ "the war of baronets".replace('r', 'y')
+         returns "the way of bayonets"
+ "sparring with a purple porpoise".replace('p', 't')
+         returns "starring with a turtle tortoise"
+ "JonL".replace('q', 'x') returns "JonL" (no change)
+ 
+
+     String message = String.join("-", "Java", "is", "cool");
+     // message returned is: "Java-is-cool"
+ 
+
+     List<String> strings = List.of("Java", "is", "cool");
+     String message = String.join(" ", strings);
+     // message returned is: "Java is cool"
+
+     Set<String> strings =
+         new LinkedHashSet<>(List.of("Java", "is", "very", "cool"));
+     String message = String.join("-", strings);
+     // message returned is: "Java-is-very-cool"
+ 
+
+ String html = """
+ ..............<html>
+ ..............    <body>
+ ..............        <p>Hello, world</p>
+ ..............    </body>
+ ..............</html>
+ ..............""";
+ 
+
+ |<html>
+ |    <body>
+ |        <p>Hello, world</p>
+ |    </body>
+ |</html>
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumber4.html:
+
+HAS_ONLY_DIGITS (
+  s: string of integer
+ ): boolean satisfies
+ if s = empty_string
+  then HAS_ONLY_DIGITS (s) = true
+  else for all a: string of integer, k: integer where (s = a * <k>)
+   (HAS_ONLY_DIGITS (s) = (HAS_ONLY_DIGITS (a)  and  0 <= k < 10))
+
+IS_WELL_FORMED_RADIX_REPRESENTATION (
+  s: string of integer
+ ): boolean is
+ s = empty_string  or
+     there exists k: integer, a: string of integer
+      (s = <k> * a  and
+       1 <= k < 10  and
+       HAS_ONLY_DIGITS (a))
+
+NUMERICAL_VALUE (
+  s: string of integer
+ ): integer satisfies
+ if s = empty_string
+  then NUMERICAL_VALUE (s) = 0
+  else for all a: string of integer, k: integer where (s = a * <k>)
+        (NUMERICAL_VALUE (s) = NUMERICAL_VALUE (a) * 10 + k)
+
+STRING_OF_DIGITS (
+  n: NATURAL
+ ): string of integer
+ if n = 0
+ then STRING_OF_DIGITS (n) = empty_string
+ else STRING_OF_DIGITS (n) = STRING_OF_DIGITS (n/10) * <n mod 10>
+
+IS_WELL_FORMED_RADIX_REPRESENTATION ($this.digits)
+this = NUMERICAL_VALUE ($this.digits)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence.html:
+0 <= pos and pos < |this|
+<entry> = this[pos, pos+1)
+0 <= pos and pos < |this|
+
+<replaceEntry> = #this[pos, pos+1)  and
+this = #this[0, pos) * <x> * #this[pos+1, |#this|)
+
+this = #this * #s
+this = rev(#this)
+0 <= pos and pos <= |this|
+this = #this[0, pos) * #s * #this[pos, |#this|)
+0 <= pos1 and pos1 <= pos2 and pos2 <= |this|
+this = #this[0, pos1) * #this[pos2, |#this|)  and
+s = #this[pos1, pos2)
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html:
+
+ parseInt("0", 10) returns 0
+ parseInt("473", 10) returns 473
+ parseInt("+42", 10) returns 42
+ parseInt("-0", 10) returns 0
+ parseInt("-FF", 16) returns -255
+ parseInt("1100110", 2) returns 102
+ parseInt("2147483647", 10) returns 2147483647
+ parseInt("-2147483648", 10) returns -2147483648
+ parseInt("2147483648", 10) throws a NumberFormatException
+ parseInt("99", 8) throws a NumberFormatException
+ parseInt("Kona", 10) throws a NumberFormatException
+ parseInt("Kona", 27) returns 411787
+ 
+
+ Integer result = getInteger(nm, null);
+ return (result == null) ? Integer.valueOf(val) : result;
+ 
+
+    Integer.valueOf(x).compareTo(Integer.valueOf(y))
+ 
+// Compressing drink to food
+compress(0xCAFEBABE, 0xFF00FFF0) == 0xCABAB
+
+// Returns 1 if the bit at position n is one
+compress(x, 1 << n) == (x >> n & 1)
+
+// Logical shift right
+compress(x, -1 << n) == x >>> n
+
+// Any bits not covered by the mask are ignored
+compress(x, m) == compress(x & m, m)
+
+// Compressing a value by itself
+compress(m, m) == (m == -1 || m == 0) ? m : (1 << bitCount(m)) - 1
+
+// Expanding then compressing with the same mask
+compress(expand(x, m), m) == x & compress(m, m)
+
+int compressLeft(int i, int mask) {
+    // This implementation follows the description in Hacker's Delight which
+    // is informative. A more optimal implementation is:
+    //   Integer.compress(i, mask) << -Integer.bitCount(mask)
+    return Integer.reverse(
+        Integer.compress(Integer.reverse(i), Integer.reverse(mask)));
+}
+
+int sag(int i, int mask) {
+    return compressLeft(i, mask) | Integer.compress(i, ~mask);
+}
+
+// Separate the sheep from the goats
+sag(0xCAFEBABE, 0xFF00FFF0) == 0xCABABFEE
+
+expand(0x0000CABAB, 0xFF00FFF0) == 0xCA00BAB0
+
+// Logically shift right the bit at position 0
+expand(x, 1 << n) == (x & 1) << n
+
+// Logically shift right
+expand(x, -1 << n) == x << n
+
+// Expanding all bits returns the mask
+expand(-1, m) == m
+
+// Any bits not covered by the mask are ignored
+expand(x, m) == expand(x, m) & m
+
+// Compressing then expanding with the same mask
+expand(compress(x, m), m) == x & m
+
+int select(int i, int n) {
+    // the one-bit in i (the mask) with index n
+    int nthBit = Integer.expand(1 << n, i);
+    // the bit position of the one-bit with index n
+    return Integer.numberOfTrailingZeros(nthBit);
+}
+
+// The one-bit with index 0 is at bit position 1
+select(0b10101010_10101010, 0) == 1
+// The one-bit with index 3 is at bit position 7
+select(0b10101010_10101010, 3) == 7
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumberKernel.html:
+NATURAL is integer
+ exemplar n
+ constraint n >= 0
+type NaturalNumberKernel is modeled by NATURAL
+():
+ ensures
+  this = 0
+(int i):
+ requires
+  i >= 0
+ ensures
+  this = i
+(String s):
+ requires
+  there exists n: NATURAL (s = TO_STRING(n))
+ ensures
+  s = TO_STRING(this)
+(NaturalNumber n):
+ ensures
+  this = n
+0 <= k < 10
+this = 10 * #this + k
+
+#this = 10 * this + divideBy10  and
+0 <= divideBy10 < 10
+
+isZero = (this = 0)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/naturalnumber/NaturalNumberSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/Program.html:
+out.is_open
+out.content =
+  #out.content * [this pretty printed using INDENT_SIZE spaces for indentation]
+in.is_open
+
+if #in.content = [a program string]  and
+   [the last token of #in.content equals the name of the program supplied
+    near the beginning]  and
+   [the beginning name of each new instruction equals its ending name]  and
+   [none of the names of the new instructions equals the name of a primitive
+    instruction in the BL language or the name of any other new
+    instruction] then
+ this = [Program corresponding to program string #in.content]  and
+ in.content = <>
+else
+ [reports an appropriate error message to the console and terminates client]
+
+[<Tokenizer.END_OF_INPUT> is a suffix of tokens]
+
+if #tokens = [a program string] * <Tokenizer.END_OF_INPUT>  and
+   [the penultimate token of #tokens equals the name of the program supplied
+    near the beginning]  and
+   [the beginning name of each new instruction equals its ending name]  and
+   [none of the names of the new instructions equals the name of a primitive
+    instruction in the BL language or the name of any other new
+    instruction] then
+ this = [Program corresponding to program string at start of #tokens]  and
+ tokens = <Tokenizer.END_OF_INPUT>
+else
+ [reports an appropriate error message to the console and terminates client]
+
+if [all instructions called in this are either primitive or
+    defined in this.context]  and
+   [this does not include any calling cycles, i.e., recursion] then
+ generatedCode =
+  [the sequence of virtual machine "byte codes" corresponding to this]
+else
+ [reports an appropriate error message to the console and terminates client]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/Program.Instruction.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/Program1.html:
+[$this.name is an IDENTIFIER] and [$this.context is a CONTEXT]
+            and [$this.body is a BLOCK statement]
+this = ($this.name, $this.context, $this.body)
+out.is_open and [cp is a valid compiled BL program]
+out.content = #out.content * [disassembled cp]
+out.is_open and [cp is a valid compiled BL program]
+out.content = #out.content * [disassembled cp]
+
+out.is_open  and  [cp is a valid compiled BL program]  and
+0 <= pc < cp.length  and
+[pc is the location of an instruction byte code in cp, that is, pc
+ cannot be the location of an address]
+
+out.content =
+ #out.content * [disassembled cp with pc marked by an asterisk]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html:
+
+     String str = "abc";
+ 
+
+     char data[] = {'a', 'b', 'c'};
+     String str = new String(data);
+ 
+
+     System.out.println("abc");
+     String cde = "cde";
+     System.out.println("abc" + cde);
+     String c = "abc".substring(2, 3);
+     String d = cde.substring(1, 2);
+ 
+
+     c == (char)(((hibyte & 0xff) << 8)
+                         | (b & 0xff))
+ 
+
+     dstBegin + (srcEnd-srcBegin) - 1
+ 
+
+     dstBegin + (srcEnd-srcBegin) - 1
+ 
+
+ this.charAt(k)-anotherString.charAt(k)
+ 
+
+ this.length()-anotherString.length()
+ 
+
+          this.substring(toffset).startsWith(prefix)
+          
+
+ s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+ 
+
+ this.charAt(k) == ch
+ 
+
+ this.codePointAt(k) == ch
+ 
+
+ (this.charAt(k) == ch) && (k >= fromIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (k >= fromIndex)
+ 
+
+ (this.charAt(k) == ch) && (beginIndex <= k < endIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (beginIndex <= k < endIndex)
+ 
+
+ this.charAt(k) == ch
+ 
+
+ this.codePointAt(k) == ch
+ 
+
+ (this.charAt(k) == ch) && (k <= fromIndex)
+ 
+
+ (this.codePointAt(k) == ch) && (k <= fromIndex)
+ 
+
+ this.startsWith(str, k)
+ 
+
+     k >= Math.min(fromIndex, this.length()) &&
+                   this.startsWith(str, k)
+ 
+
+     s.substring(beginIndex, endIndex).indexOf(str) + beginIndex
+ 
+
+ this.startsWith(str, k)
+ 
+
+     k <= Math.min(fromIndex, this.length()) &&
+                   this.startsWith(str, k)
+ 
+
+ "unhappy".substring(2) returns "happy"
+ "Harbison".substring(3) returns "bison"
+ "emptiness".substring(9) returns "" (an empty string)
+ 
+
+ "hamburger".substring(4, 8) returns "urge"
+ "smiles".substring(1, 5) returns "mile"
+ 
+
+ str.subSequence(begin, end)
+
+ str.substring(begin, end)
+
+ "cares".concat("s") returns "caress"
+ "to".concat("get").concat("her") returns "together"
+ 
+
+ "mesquite in your cellar".replace('e', 'o')
+         returns "mosquito in your collar"
+ "the war of baronets".replace('r', 'y')
+         returns "the way of bayonets"
+ "sparring with a purple porpoise".replace('p', 't')
+         returns "starring with a turtle tortoise"
+ "JonL".replace('q', 'x') returns "JonL" (no change)
+ 
+
+     String message = String.join("-", "Java", "is", "cool");
+     // message returned is: "Java-is-cool"
+ 
+
+     List<String> strings = List.of("Java", "is", "cool");
+     String message = String.join(" ", strings);
+     // message returned is: "Java is cool"
+
+     Set<String> strings =
+         new LinkedHashSet<>(List.of("Java", "is", "very", "cool"));
+     String message = String.join("-", strings);
+     // message returned is: "Java-is-very-cool"
+ 
+
+ String html = """
+ ..............<html>
+ ..............    <body>
+ ..............        <p>Hello, world</p>
+ ..............    </body>
+ ..............</html>
+ ..............""";
+ 
+
+ |<html>
+ |    <body>
+ |        <p>Hello, world</p>
+ |    </body>
+ |</html>
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/map/Map.html:
+RANGE(
+  m: PARTIAL_FUNCTION
+ ): finite set of V satisfies
+ for all value: V (value is in RANGE(m) iff
+  there exists key: K ((key, value) is in m))
+key is in DOMAIN(this)
+this = (#this \ {(key, replaceValue)}) union {(key, value)}  and
+(key, replaceValue) is in #this
+value is in RANGE(this)
+(key, value) is in this
+hasValue = (value is in RANGE(this))
+sharesKeyWith = (DOMAIN(this) intersection DOMAIN(m) /= {})
+DOMAIN(this) intersection DOMAIN(m) = {}
+this = #this union #m
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/Statement.html:
+out.is_open and 0 <= offset
+out.content =
+  #out.content * [this pretty printed offset spaces from the left margin
+                  using Program.INDENT_SIZE spaces for indentation]
+[<Tokenizer.END_OF_INPUT> is a suffix of tokens]
+if [a statement string is a proper prefix of #tokens] then
+ this =
+  [Statement corresponding to statement string at start of #tokens]  and
+ #tokens = [statement string at start of #tokens] * tokens
+else
+ [reports an appropriate error message to the console and terminates client]
+[<Tokenizer.END_OF_INPUT> is a suffix of tokens]
+if [there is a block string b that is a prefix of #tokens]  and
+   [the first token past b in #tokens cannot begin a statement string] then
+ this =
+  [BLOCK Statement corresponding to a block string at start of #tokens
+   that is immediately followed by a token in #tokens that cannot begin
+   a statement string]  and
+  #tokens =
+   [a block string at start of #tokens that is immediately followed
+    by a token in #tokens that cannot begin a statement string] * tokens
+else
+ [reports an appropriate error message to the console and terminates client]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/ProgramKernel.html:
+CONTEXT is finite set of (name: IDENTIFIER, body: STATEMENT_MODEL)
+ exemplar c
+ constraint
+  [the names of instructions in c are unique]  and
+  [the names of instructions in c do not match the names of primitive
+   instructions in the BL language]  and
+  [the bodies of instructions in c are all BLOCK statements]
+
+PROGRAM_MODEL is (
+  name: IDENTIFIER,
+  context: CONTEXT,
+  body: STATEMENT_MODEL
+ )
+ exemplar p
+ constraint
+  [p.body is a BLOCK statement]
+type ProgramKernel is modeled by PROGRAM_MODEL
+():
+ ensures
+  this = ("Unnamed", {}, compose((BLOCK, ?, ?), <>))
+name = this.name
+[n is a valid IDENTIFIER]
+this.name = n
+newContext = {}
+[names in c are valid IDENTIFIERs]  and
+[names in c do not match the names of primitive instructions
+ in the BL language]  and
+[bodies in c are all BLOCK statements]
+this.context = #c and c = #this.context
+newBody = compose((BLOCK, ?, ?), <>)
+[b is a BLOCK statement]
+this.body = #b and b = #this.body
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/program/ProgramSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue1L.html:
+this = [value of $this.rep based on List's "proper sequence"]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html:
+
+     String[] y = x.toArray(new String[0]);
+ 
+
+     final ListIterator<E> li = list.listIterator();
+     while (li.hasNext()) {
+         li.set(operator.apply(li.next()));
+     }
+ 
+
+     int hashCode = 1;
+     for (E e : list)
+         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+ 
+
+      list.subList(from, to).clear();
+ 
+
+     String[] array = ... ;
+     List<String[]> list = List.<String[]>of(array);
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue2.html:
+$this.length >= 0  and
+[$this.preFront is not null]  and
+[$this.rear is not null]  and
+[$this.preFront points to the first node of a singly linked list
+ containing $this.length + 1 nodes]  and
+[$this.rear points to the last node in that singly linked list]  and
+[$this.rear.next is null]
+this = [data in nodes starting at $this.preFront.next and
+ running through $this.rear]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue3.html:
+this = $this.entries
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence.html:
+0 <= pos and pos < |this|
+<entry> = this[pos, pos+1)
+0 <= pos and pos < |this|
+
+<replaceEntry> = #this[pos, pos+1)  and
+this = #this[0, pos) * <x> * #this[pos+1, |#this|)
+
+this = #this * #s
+this = rev(#this)
+0 <= pos and pos <= |this|
+this = #this[0, pos) * #s * #this[pos, |#this|)
+0 <= pos1 and pos1 <= pos2 and pos2 <= |this|
+this = #this[0, pos1) * #this[pos2, |#this|)  and
+s = #this[pos1, pos2)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/QueueKernel.html:
+type QueueKernel is modeled by string of T
+
+():
+ ensures
+  this = <>
+
+~this.seen * ~this.unseen = this
+this = #this * <x>
+this /= <>
+#this = <dequeue> * this
+length = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/QueueSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/Random.html:
+
+BOUNDED_REAL is real
+ exemplar x
+ constraint
+  0.0 <= x < 1.0
+
+type Random is modeled by infinite string of BOUNDED_REAL
+():
+ ensures
+  [this satisfies appropriate statistical tests of randomness]
+#this = <nextDouble> * this
+
+there exists x: real
+ (#this = <x> * this and
+  nextInt =
+   floor((Integer.MAX_VALUE - Integer.MIN_VALUE + 1) * x) + Integer.MIN_VALUE
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/random/Random1L.html:
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Random.html:
+
+ Random rnd = new Random();
+ rnd.setSeed(seed);
+ 
+(seed ^ 0x5DEECE66DL) & ((1L << 48) - 1)
+(seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1)
+(int)(seed >>> (48 - bits)).
+
+ public void nextBytes(byte[] bytes) {
+   for (int i = 0; i < bytes.length; )
+     for (int rnd = nextInt(), n = Math.min(bytes.length - i, 4);
+          n-- > 0; rnd >>= 8)
+       bytes[i++] = (byte)rnd;
+ }
+
+ public int nextInt() {
+   return next(32);
+ }
+
+ public int nextInt(int bound) {
+   if (bound <= 0)
+     throw new IllegalArgumentException("bound must be positive");
+
+   if ((bound & -bound) == bound)  // i.e., bound is a power of 2
+     return (int)((bound * (long)next(31)) >> 31);
+
+   int bits, val;
+   do {
+       bits = next(31);
+       val = bits % bound;
+   } while (bits - val + (bound-1) < 0);
+   return val;
+ }
+
+ public long nextLong() {
+   return ((long)next(32) << 32) + next(32);
+ }
+
+ public boolean nextBoolean() {
+   return next(1) != 0;
+ }
+
+ public float nextFloat() {
+   return next(24) / ((float)(1 << 24));
+ }
+ return next(30) / ((float)(1 << 30));
+
+ public double nextDouble() {
+   return (((long)next(26) << 27) + next(27))
+     / (double)(1L << 53);
+ }
+ return (((long)next(27) << 27) + next(27)) / (double)(1L << 54);
+
+ private double nextNextGaussian;
+ private boolean haveNextNextGaussian = false;
+
+ public double nextGaussian() {
+   if (haveNextNextGaussian) {
+     haveNextNextGaussian = false;
+     return nextNextGaussian;
+   } else {
+     double v1, v2, s;
+     do {
+       v1 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
+       v2 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
+       s = v1 * v1 + v2 * v2;
+     } while (s >= 1 || s == 0);
+     double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s)/s);
+     nextNextGaussian = v2 * multiplier;
+     haveNextNextGaussian = true;
+     return v1 * multiplier;
+   }
+ }
+ 
+ int nextInt(int origin, int bound) {
+   int n = bound - origin;
+   if (n > 0) {
+     return nextInt(n) + origin;
+   }
+   else {  // range not representable as int
+     int r;
+     do {
+       r = nextInt();
+     } while (r < origin || r >= bound);
+     return r;
+   }
+ }
+ 
+ int nextInt(int origin, int bound) {
+   int n = bound - origin;
+   if (n > 0) {
+     return nextInt(n) + origin;
+   }
+   else {  // range not representable as int
+     int r;
+     do {
+       r = nextInt();
+     } while (r < origin || r >= bound);
+     return r;
+   }
+ }
+ 
+ long nextLong(long origin, long bound) {
+   long r = nextLong();
+   long n = bound - origin, m = n - 1;
+   if ((n & m) == 0L)  // power of two
+     r = (r & m) + origin;
+   else if (n > 0L) {  // reject over-represented candidates
+     for (long u = r >>> 1;            // ensure nonnegative
+          u + m - (r = u % n) < 0L;    // rejection check
+          u = nextLong() >>> 1) // retry
+         ;
+     r += origin;
+   }
+   else {              // range not representable as long
+     while (r < origin || r >= bound)
+       r = nextLong();
+   }
+   return r;
+ }
+ 
+ long nextLong(long origin, long bound) {
+   long r = nextLong();
+   long n = bound - origin, m = n - 1;
+   if ((n & m) == 0L)  // power of two
+     r = (r & m) + origin;
+   else if (n > 0L) {  // reject over-represented candidates
+     for (long u = r >>> 1;            // ensure nonnegative
+          u + m - (r = u % n) < 0L;    // rejection check
+          u = nextLong() >>> 1) // retry
+         ;
+     r += origin;
+   }
+   else {              // range not representable as long
+     while (r < origin || r >= bound)
+       r = nextLong();
+   }
+   return r;
+ }
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence.html:
+0 <= pos and pos < |this|
+<entry> = this[pos, pos+1)
+0 <= pos and pos < |this|
+
+<replaceEntry> = #this[pos, pos+1)  and
+this = #this[0, pos) * <x> * #this[pos+1, |#this|)
+
+this = #this * #s
+this = rev(#this)
+0 <= pos and pos <= |this|
+this = #this[0, pos) * #s * #this[pos, |#this|)
+0 <= pos1 and pos1 <= pos2 and pos2 <= |this|
+this = #this[0, pos1) * #this[pos2, |#this|)  and
+s = #this[pos1, pos2)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence1L.html:
+this = [value of $this.rep]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html:
+
+   List list = Collections.synchronizedList(new ArrayList(...));
+
+      list.subList(from, to).clear();
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence2L.html:
+this = [value of $this.rep]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedList.html:
+
+   List list = Collections.synchronizedList(new LinkedList(...));
+
+     String[] y = x.toArray(new String[0]);
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence3.html:
+this = rev($this.left) * $this.right
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack.html:
+this /= <>
+<top> is prefix of this
+this /= <>
+
+<replaceTop> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = rev(#this)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/SequenceKernel.html:
+type SequenceKernel is modeled by string of T
+
+():
+ ensures
+  this = <>
+
+~this.seen * ~this.unseen = this
+0 <= pos and pos <= |this|
+this = #this[0, pos) * <x> * #this[pos, |#this|)
+0 <= pos and pos < |this|
+
+this = #this[0, pos) * #this[pos+1, |#this|)  and
+<remove> = #this[pos, pos+1)
+
+length = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/SequenceSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set.html:
+this = #this union #s  and
+s = #this intersection #s
+this = #this \ s  and
+remove = #this intersection s
+isSubset = this is subset of s
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set1L.html:
+this = [value of $this]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html:
+
+     String[] y = x.toArray(new String[0]);
+
+     String[] array = ... ;
+     Set<String[]> list = Set.<String[]>of(array);
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set2.html:
+|$this.elements| = |entries($this.elements)|
+this = entries($this.elements)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set3.html:
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_BST(
+  tree: binary tree of T,
+  r: binary relation on T
+ ): boolean satisfies
+ [tree satisfies the binary search tree ordering property according to the
+  relation r and has no duplicate labels]
+IS_TOTAL_PREORDER([relation computed by $this.order.compare method]  and
+IS_BST($this.tree, $this.order)
+this = labels($this.tree)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/binarytree/BinaryTree.html:
+this /= empty_tree
+there exists left, right: binary tree of T
+    (this = compose(root, left, right))
+this /= empty_tree
+there exists left, right: binary tree of T
+    (#this = compose(replaceRoot, left, right)  and
+     this = compose(x, left, right))
+height = ht(this)
+IN_ORDER(this) = IN_ORDER(compose(root, #left, #right))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set4.html:
+
+|$this.hashTable| > 0  and
+for all i: integer, s: finite set of T, x: T
+    where (0 <= i  and  i < |$this.hashTable|  and
+           <s> = $this.hashTable[i, i+1)  and
+           x is in s)
+  ([computed result of x.hashCode()] mod |$this.hashTable| = i)  and
+for all i: integer
+    where (0 <= i  and  i < |$this.hashTable|)
+  ([entry at position i in $this.hashTable is not null])  and
+$this.size = sum i: integer, s: finite set of T
+    where (0 <= i  and  i < |$this.hashTable|  and
+           <s> = $this.hashTable[i, i+1))
+  (|s|)
+
+
+this = union i: integer, s: finite set of T
+           where (0 <= i  and  i < |$this.hashTable|  and
+                  <s> = $this.hashTable[i, i+1))
+         (s)
+
+hashTableSize > 0
+this = {}
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/Set.html:
+this = #this union #s  and
+s = #this intersection #s
+this = #this \ s  and
+remove = #this intersection s
+isSubset = this is subset of s
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/SetKernel.html:
+type SetKernel is modeled by finite set of T
+():
+ ensures
+  this = {}
+entries(~this.seen * ~this.unseen) = this  and
+|~this.seen * ~this.unseen| = |this|
+x is not in this
+this = #this union {x}
+x is in this
+this = #this \ {x}  and
+remove = x
+|this| > 0
+removeAny is in #this and
+this = #this \ {removeAny}
+contains = (x is in this)
+size = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/set/SetSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/SimpleReader.html:
+LINE_SEPARATOR: string of character is
+  [character(s) used to denote line separator on the system where the input stream
+   content was created]
+this.is_open and this.content /= <>
+
+if LINE_SEPARATOR is substring of #this.content
+  then (#this.content = nextLine * LINE_SEPARATOR * this.content)
+  else (nextLine = #this.content  and  this.content = <>)
+
+
+this.is_open  and
+there exists i: integer
+  (Integer.MIN_VALUE <= i  and  i <= Integer.MAX_VALUE  and
+   (TO_STRING(i) * LINE_SEPARATOR is prefix of this.content  or
+    TO_STRING(i) = this.content))
+
+
+if LINE_SEPARATOR is substring of #this.content
+  then (#this.content = TO_STRING(nextInteger) * LINE_SEPARATOR * this.content)
+  else (TO_STRING(nextInteger) = #this.content  and  this.content = <>)
+
+
+this.is_open  and
+there exists i: integer
+  (Long.MIN_VALUE <= i  and  i <= Long.MAX_VALUE  and
+   (TO_STRING(i) * LINE_SEPARATOR is prefix of this.content  or
+    TO_STRING(i) = this.content))
+
+
+if LINE_SEPARATOR is substring of #this.content
+  then (#this.content = TO_STRING(nextLong) * LINE_SEPARATOR * this.content)
+  else (TO_STRING(nextLong) = #this.content  and  this.content = <>)
+
+this.is_open  and
+there exists b: boolean
+  (TO_STRING(b) * LINE_SEPARATOR is prefix of this.content  or
+   TO_STRING(b) = this.content))
+
+if LINE_SEPARATOR is substring of #this.content
+  then (#this.content = TO_STRING(nextBoolean) * LINE_SEPARATOR * this.content)
+  else (TO_STRING(nextBoolean) = #this.content  and  this.content = <>)
+
+
+this.is_open  and
+there exists d: real
+  (Double.MIN_VALUE <= d  and  d <= Double.MAX_VALUE  and
+   (TO_STRING(d) * LINE_SEPARATOR is prefix of this.content  or
+    TO_STRING(d) = this.content))
+
+
+if LINE_SEPARATOR is substring of #this.content
+  then (#this.content = TO_STRING(nextDouble) * LINE_SEPARATOR * this.content)
+  else (TO_STRING(nextDouble) = #this.content  and  this.content = <>)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/SimpleReader1L.html:
+
+[$this.rep is not null when the stream is open and
+ lookAheadIsValid is true iff the contents of $this.rep is not <>]
+
+this.is_open = [$this.rep is open] and
+ this.ext_name = $this.name and
+ if $this.lookAheadIsValid then
+   this.contents = [$this.lookAhead * the contents of $this.rep]
+ else
+   this.contents = [the contents of $this.rep]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html:
+    BufferedReader in = new BufferedReader(new FileReader("foo.in"));
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/SimpleReaderKernel.html:
+
+CHARACTER_STREAM_MODEL is (
+  is_open: boolean,
+  ext_name: string of character,
+  content: string of character)
+ exemplar cs
+ constraint
+  if not cs.is_open
+    then (cs.ext_name = <> and
+          cs.content = <>)
+
+type SimpleReader is modeled by CHARACTER_STREAM_MODEL
+
+():
+  ensures
+    this = (true, <>, [contents of stdin])
+(String name):
+  requires
+    [name is the name of a file that exists and is readable or
+     name is a valid URL that is accessible]
+  ensures
+    this = (true, name,
+     [contents of the file or of the page referred to by the name])
+
+this.is_open and this.content /= <>
+#this.content = <read> * this.content
+this.is_open and this.content /= <>
+<peek> is prefix of this.content
+isOpen = this.is_open
+name = this.ext_name
+this.is_open
+atEOS = (this.content = <>)
+this.is_open
+this = (false, <>, <>)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplereader/SimpleReaderSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/SimpleWriter.html:
+LINE_SEPARATOR: string of character is
+  [character(s) used to denote line separator on the local system]
+this.is_open
+this.content = #this.content * s
+this.is_open
+this.content = #this.content * TO_STRING(i)
+this.is_open
+this.content = #this.content * TO_STRING(x)
+this.is_open
+this.content = #this.content * TO_STRING(d)
+this.is_open and precision >= 0
+this.content = #this.content * TO_STRING(d, precision, scientific)
+this.is_open
+this.content = #this.content * TO_STRING(b)
+this.is_open
+this.content = #this.content * <c>
+this.is_open
+this.content = #this.content * to_string(o)
+this.is_open
+this.content = #this.content * s * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * TO_STRING(i) * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * TO_STRING(x) * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * TO_STRING(d) * LINE_SEPARATOR
+this.is_open and precision >= 0
+this.content =
+  #this.content * TO_STRING(d, precision, scientific) * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * TO_STRING(b) * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * <c> * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * LINE_SEPARATOR
+this.is_open
+this.content = #this.content * to_string(o) * LINE_SEPARATOR
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/SimpleWriter1L.html:
+[$this.rep is not null when the stream is open]
+this.is_open = [$this.rep is open] and
+ this.ext_name = $this.name and
+ this.contents = [the contents of $this.rep]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/PrintWriter.html:
+    out.format(format, args)
+
+    out.format(l, format, args)
+
+    out.write(csq.toString())
+
+    out.write(csq.subSequence(start, end).toString())
+
+    out.write(c)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/SimpleWriterKernel.html:
+
+CHARACTER_STREAM_MODEL is (
+  is_open: boolean,
+  ext_name: string of character,
+  content: string of character)
+ exemplar cs
+ constraint
+  if not cs.is_open
+    then (cs.ext_name = <> and
+          cs.content = <>)
+
+type SimpleWriter is modeled by CHARACTER_STREAM_MODEL
+
+():
+  ensures
+    this = (true, <>, <>)
+(String fileName):
+  requires
+    [fileName is the name of a file that exists and is writeable]
+  ensures
+    this = (true, fileName, <>)
+
+this.is_open
+this.content = #this.content * <c>
+name = this.ext_name
+isOpen = this.is_open
+this.is_open
+this = (false, <>, <>)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/simplewriter/SimpleWriterSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine1L.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+IS_TOTAL_PREORDER([relation computed by $this.machineOrder.compare method])  and
+if not $this.insertionMode then
+ IS_SORTED($this.entries, [relation computed by $this.machineOrder.compare method])
+this = ($this.insertionMode, $this.machineOrder, [value of $this.entries])
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html:
+
+     String[] y = x.toArray(new String[0]);
+ 
+
+     final ListIterator<E> li = list.listIterator();
+     while (li.hasNext()) {
+         li.set(operator.apply(li.next()));
+     }
+ 
+
+     int hashCode = 1;
+     for (E e : list)
+         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+ 
+
+      list.subList(from, to).clear();
+ 
+
+     String[] array = ... ;
+     List<String[]> list = List.<String[]>of(array);
+ 
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html#sort(java.util.List,java.util.Comparator):
+
+     Collections.rotate(list.subList(j, k+1), -1);
+ 
+
+     Collections.rotate(l.subList(1, 4), -1);
+ 
+
+  Collection c = Collections.synchronizedCollection(myCollection);
+     ...
+  synchronized (c) {
+      Iterator i = c.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+         foo(i.next());
+  }
+ 
+
+  Set s = Collections.synchronizedSet(new HashSet());
+      ...
+  synchronized (s) {
+      Iterator i = s.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
+      ...
+  synchronized (s) {
+      Iterator i = s.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
+  SortedSet s2 = s.headSet(foo);
+      ...
+  synchronized (s) {  // Note: s, not s2!!!
+      Iterator i = s2.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  NavigableSet s = Collections.synchronizedNavigableSet(new TreeSet());
+      ...
+  synchronized (s) {
+      Iterator i = s.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  NavigableSet s = Collections.synchronizedNavigableSet(new TreeSet());
+  NavigableSet s2 = s.headSet(foo, true);
+      ...
+  synchronized (s) {  // Note: s, not s2!!!
+      Iterator i = s2.iterator(); // Must be in the synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  List list = Collections.synchronizedList(new ArrayList());
+      ...
+  synchronized (list) {
+      Iterator i = list.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  Map m = Collections.synchronizedMap(new HashMap());
+      ...
+  Set s = m.keySet();  // Needn't be in synchronized block
+      ...
+  synchronized (m) {  // Synchronizing on m, not s!
+      Iterator i = s.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
+      ...
+  Set s = m.keySet();  // Needn't be in synchronized block
+      ...
+  synchronized (m) {  // Synchronizing on m, not s!
+      Iterator i = s.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
+  SortedMap m2 = m.subMap(foo, bar);
+      ...
+  Set s2 = m2.keySet();  // Needn't be in synchronized block
+      ...
+  synchronized (m) {  // Synchronizing on m, not m2 or s2!
+      Iterator i = s2.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  NavigableMap m = Collections.synchronizedNavigableMap(new TreeMap());
+      ...
+  Set s = m.keySet();  // Needn't be in synchronized block
+      ...
+  synchronized (m) {  // Synchronizing on m, not s!
+      Iterator i = s.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+
+  NavigableMap m = Collections.synchronizedNavigableMap(new TreeMap());
+  NavigableMap m2 = m.subMap(foo, true, bar, false);
+      ...
+  Set s2 = m2.keySet();  // Needn't be in synchronized block
+      ...
+  synchronized (m) {  // Synchronizing on m, not m2 or s2!
+      Iterator i = s2.iterator(); // Must be in synchronized block
+      while (i.hasNext())
+          foo(i.next());
+  }
+ 
+ 
+     Collection<String> c = new HashSet<>();
+ 
+ 
+     Collection<String> c = Collections.checkedCollection(
+         new HashSet<>(), String.class);
+ 
+
+     Set<String> s = Collections.emptySet();
+ 
+ 
+     SortedSet<String> s = Collections.emptySortedSet();
+ 
+ 
+     NavigableSet<String> s = Collections.emptyNavigableSet();
+ 
+
+     List<String> s = Collections.emptyList();
+ 
+
+     Map<String, Date> s = Collections.emptyMap();
+ 
+ 
+     SortedMap<String, Date> s = Collections.emptySortedMap();
+ 
+ 
+     NavigableMap<String, Date> s = Collections.emptyNavigableMap();
+ 
+
+          Arrays.sort(a, Collections.reverseOrder());
+ 
+
+     Collections.addAll(flavors, "Peaches 'n Plutonium", "Rocky Racoon");
+ 
+
+    Set<Object> weakHashSet = Collections.newSetFromMap(
+        new WeakHashMap<Object, Boolean>());
+ 
+    SequencedSet<String> set = Collections.newSequencedSetFromMap(
+        new LinkedHashMap<String, Boolean>() {
+            protected boolean removeEldestEntry(Map.Entry<String, Boolean> e) {
+                return this.size() > 5;
+            }
+       });
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine2.html:
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+IS_TOTAL_PREORDER([relation computed by $this.machineOrder.compare method])
+this =
+  ($this.insertionMode, $this.machineOrder, multiset_entries($this.entries))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine3.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+IS_TOTAL_PREORDER([relation computed by $this.machineOrder.compare method])  and
+IS_SORTED($this.entries, [relation computed by $this.machineOrder.compare method])
+this =
+  ($this.insertionMode, $this.machineOrder, multiset_entries($this.entries))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine4.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+IS_TOTAL_PREORDER([relation computed by $this.machineOrder.compare method])  and
+if not $this.insertionMode then
+ IS_SORTED($this.entries, [relation computed by $this.machineOrder.compare method])
+this =
+  ($this.insertionMode, $this.machineOrder, multiset_entries($this.entries))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachine5.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+SUBTREE_IS_HEAP (
+  a: string of T,
+  start: integer,
+  stop: integer,
+  r: binary relation on T
+ ) : boolean is
+ [the subtree of a (when a is interpreted as a complete binary tree) rooted
+  at index start and only through entry stop of a satisfies the heap
+  ordering property according to the relation r]
+
+SUBTREE_ARRAY_ENTRIES (
+  a: string of T,
+  start: integer,
+  stop: integer
+ ) : finite multiset of T is
+ [the multiset of entries in a that belong to the subtree of a
+  (when a is interpreted as a complete binary tree) rooted at
+  index start and only through entry stop]
+
+
+IS_TOTAL_PREORDER([relation computed by $this.machineOrder.compare method])  and
+if $this.insertionMode then
+  $this.heapSize = 0
+else
+  $this.entries = <>  and
+  for all i: integer
+      where (0 <= i  and  i < $this.heapSize)
+    ([entry at position i in $this.heap is not null])  and
+  for all i: integer
+      where ($this.heapSize <= i  and  i < |$this.heap|)
+    ([entry at position i in $this.heap is null])  and
+  SUBTREE_IS_HEAP($this.heap, 0, $this.heapSize - 1,
+    [relation computed by $this.machineOrder.compare method])  and
+  0 <= $this.heapSize <= |$this.heap|
+
+if $this.insertionMode then
+  this = (true, $this.machineOrder, multiset_entries($this.entries))
+else
+  this = (false, $this.machineOrder,
+    multiset_entries($this.heap[0, $this.heapSize)))
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/queue/Queue.html:
+
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+
+IS_SORTED (
+  s: string of T,
+  r: binary relation on T
+ ) : boolean is
+ for all x, y: T where (<x, y> is substring of s) (r(x, y))
+
+this /= <>
+<front> is prefix of this
+this /= <>
+
+<replaceFront> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = #this * #q
+this = rev(#this)
+IS_TOTAL_PREORDER([relation computed by order.compare method])
+perms(this, #this)  and
+IS_SORTED(this, [relation computed by order.compare method])
+
+if #this = <> then
+ this = #this
+else
+ this = #this[distance mod |#this|, |#this|) * #this[0, distance mod |#this|)
+
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachineKernel.html:
+SORTING_MACHINE_MODEL is (
+  insertion_mode: boolean,
+  ordering: binary relation on T,
+  contents: finite multiset of T
+ )
+ exemplar m
+ constraint
+  IS_TOTAL_PREORDER(m.ordering)
+IS_TOTAL_PREORDER (
+  r: binary relation on T
+ ) : boolean is
+ for all x, y, z: T
+  ((r(x, y) or r(y, x))  and
+   (if (r(x, y) and r(y, z)) then r(x, z)))
+type SortingMachineKernel is modeled by SORTING_MACHINE_MODEL
+(Comparator<T> order):
+ aliases reference {@code order}
+ requires
+  IS_TOTAL_PREORDER(order)
+ ensures
+  this = (true, order, {})
+multiset_entries(~this.seen * ~this.unseen) = this.contents
+this.insertion_mode
+this.contents = #this.contents union {x}
+this.insertion_mode
+not this.insertion_mode
+not this.insertion_mode  and
+this.contents /= {}
+removeFirst is in #this.contents  and
+for all x: T where (x is in #this.contents)
+ (this.ordering(removeFirst, x))  and
+this.contents = #this.contents \ {removeFirst}
+isInInsertionMode = this.insertion_mode
+order = [Comparator used in the constructor call that created this]
+size = |this.contents|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sortingmachine/SortingMachineSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack.html:
+this /= <>
+<top> is prefix of this
+this /= <>
+
+<replaceTop> is prefix of #this  and
+this = <x> * #this[1, |#this|)
+
+this = rev(#this)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack1L.html:
+this = [value of $this.rep based on List's "proper sequence"]
+
+Methods for https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html:
+
+     String[] y = x.toArray(new String[0]);
+ 
+
+     final ListIterator<E> li = list.listIterator();
+     while (li.hasNext()) {
+         li.set(operator.apply(li.next()));
+     }
+ 
+
+     int hashCode = 1;
+     for (E e : list)
+         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+ 
+
+      list.subList(from, to).clear();
+ 
+
+     String[] array = ... ;
+     List<String[]> list = List.<String[]>of(array);
+ 
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack2.html:
+$this.length >= 0  and
+if $this.length = 0 then
+  [$this.top is null]
+else
+  [$this.top is not null]  and
+  [$this.top points to the first node of a singly linked list
+   containing $this.length nodes]  and
+  [next in the last node of that list is null]
+this = [data in $this.length nodes starting at $this.top]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/Stack3.html:
+this = $this.entries
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/sequence/Sequence.html:
+0 <= pos and pos < |this|
+<entry> = this[pos, pos+1)
+0 <= pos and pos < |this|
+
+<replaceEntry> = #this[pos, pos+1)  and
+this = #this[0, pos) * <x> * #this[pos+1, |#this|)
+
+this = #this * #s
+this = rev(#this)
+0 <= pos and pos <= |this|
+this = #this[0, pos) * #s * #this[pos, |#this|)
+0 <= pos1 and pos1 <= pos2 and pos2 <= |this|
+this = #this[0, pos1) * #this[pos2, |#this|)  and
+s = #this[pos1, pos2)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/StackKernel.html:
+type StackKernel is modeled by string of T
+
+():
+ ensures
+  this = <>
+
+~this.seen * ~this.unseen = this
+this = <x> * #this
+this /= <>
+#this = <pop> * this
+length = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stack/StackSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/standard/Standard.html:
+is_initial(newInstance)
+this = #source
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/Statement.html:
+out.is_open and 0 <= offset
+out.content =
+  #out.content * [this pretty printed offset spaces from the left margin
+                  using Program.INDENT_SIZE spaces for indentation]
+[<Tokenizer.END_OF_INPUT> is a suffix of tokens]
+if [a statement string is a proper prefix of #tokens] then
+ this =
+  [Statement corresponding to statement string at start of #tokens]  and
+ #tokens = [statement string at start of #tokens] * tokens
+else
+ [reports an appropriate error message to the console and terminates client]
+[<Tokenizer.END_OF_INPUT> is a suffix of tokens]
+if [there is a block string b that is a prefix of #tokens]  and
+   [the first token past b in #tokens cannot begin a statement string] then
+ this =
+  [BLOCK Statement corresponding to a block string at start of #tokens
+   that is immediately followed by a token in #tokens that cannot begin
+   a statement string]  and
+  #tokens =
+   [a block string at start of #tokens that is immediately followed
+    by a token in #tokens that cannot begin a statement string] * tokens
+else
+ [reports an appropriate error message to the console and terminates client]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/Statement1.html:
+[$this.rep is a valid representation of a Statement]
+this = $this.rep
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/Tree.html:
+
+HEIGHT(
+  t: tree of T
+ ): integer satisfies
+ if t = empty_tree
+  then HEIGHT(t) = 0
+  else there exists root: T, children: string of tree of T
+        (t = compose(root, children) and
+         HEIGHT(t) = 1 + MAX_HEIGHT(children))
+
+MAX_HEIGHT(
+  s: string of tree of T
+ ): integer satisfies
+ if s = empty_string
+  then MAX_HEIGHT(s) = 0
+  else there exists t: tree of T, rest: string of tree of T
+        (s = <t> * rest and
+         MAX_HEIGHT(s) = max(HEIGHT(t), MAX_HEIGHT(rest))
+
+this /= empty_tree
+there exists children: string of tree of T
+    (this = compose(root, children))
+this /= empty_tree
+there exists children: string of tree of T
+    (#this = compose(replaceRoot, children)  and
+     this = compose(x, children))
+height = HEIGHT(this)
+
+this /= empty_tree  and
+0 <= pos <= [number of children of this]
+
+this = [#this with subtree #st inserted at position pos]
+
+this /= empty_tree  and
+0 <= pos < [number of children of this]
+
+this =
+ [#this with subtree at position pos removed and returned as result]
+this /= empty_tree
+there exists root: T, children: string of tree of T
+    (this = compose(root, children)  and
+     numberOfSubtrees = |children|)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/StatementKernel.html:
+IDENTIFIER is string of character
+ exemplar id
+ constraint
+  [id starts with a letter 'a'-'z', 'A'-'Z']  and
+  [id contains only letters, digits '0'-'9', and '-']  and
+  [id is not one of the keywords or conditions in the BL language]
+
+STATEMENT_LABEL is (
+  kind: Kind,
+  test: Condition,
+  call: IDENTIFIER
+ )
+ exemplar sl
+ constraint
+  [if sl.kind = BLOCK then sl.test and sl.call are irrelevant]  and
+  [if sl.kind = IF or sl.kind = IF_ELSE or sl.kind = WHILE
+   then sl.call is irrelevant]  and
+  [if sl.kind = CALL then sl.test is irrelevant]
+
+STATEMENT_MODEL is tree of STATEMENT_LABEL
+ exemplar s
+ constraint
+  |s| > 0  and
+  [BLOCK can have 0 or more children, but not another BLOCK as a child]  and
+  [IF must have exactly one BLOCK child]  and
+  [IF_ELSE must have exactly two BLOCK children]  and
+  [WHILE must have exactly one BLOCK child]  and
+  [CALL must have no children (must be a leaf)]
+type StatementKernel is modeled by STATEMENT_MODEL
+
+():
+ ensures
+  this = compose((BLOCK, ?, ?), <>)
+
+kind = [the kind of this statement]
+
+[this is a BLOCK statement]  and
+[s is not a BLOCK statement]  and
+0 <= pos <= [length of this BLOCK]
+
+this = [#this with child #s inserted at position pos]
+
+[this is a BLOCK statement]  and
+0 <= pos < [length of this BLOCK]
+
+this =
+ [#this with child at position pos removed and returned as result]
+[this is a BLOCK statement]
+lengthOfBlock = [the number of children of this]
+[s is a BLOCK statement]
+this = compose((IF, c, ?), <#s>)
+[this is an IF statement]
+#this = compose((IF, disassembleIf, ?), <s>)
+[s1 is a BLOCK statement]  and
+[s2 is a BLOCK statement]
+this = compose((IF_ELSE, c, ?), <#s1, #s2>)
+[this is an IF_ELSE statement]
+#this = compose((IF_ELSE, disassembleIfElse, ?), <s1, s2>)
+[s is a BLOCK statement]
+this = compose((WHILE, c, ?), <#s>)
+[this is a WHILE statement]
+#this = compose((WHILE, disassembleWhile, ?), <s>)
+[inst is a valid IDENTIFIER]
+this = compose((CALL, ?, inst), <>)
+[this is a CALL statement]
+#this = compose((CALL, ?, disassembleCall), <>)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/StatementKernel.Condition.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/StatementKernel.Kind.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/statement/StatementSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/Stopwatch.html:
+STOPWATCH_MODEL is (
+  time: integer,
+  running: boolean
+ )
+ exemplar s
+ constraint
+  s.time = [CPU time in milliseconds that this.running has been true]
+type Stopwatch is modeled by STOPWATCH_MODEL
+():
+ ensures
+  this = (0, false)
+not this.running
+this.running
+this.running
+not this.running
+elapsed = this.time
+isRunning = this.running
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/stopwatch/Stopwatch1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/Tree.html:
+
+HEIGHT(
+  t: tree of T
+ ): integer satisfies
+ if t = empty_tree
+  then HEIGHT(t) = 0
+  else there exists root: T, children: string of tree of T
+        (t = compose(root, children) and
+         HEIGHT(t) = 1 + MAX_HEIGHT(children))
+
+MAX_HEIGHT(
+  s: string of tree of T
+ ): integer satisfies
+ if s = empty_string
+  then MAX_HEIGHT(s) = 0
+  else there exists t: tree of T, rest: string of tree of T
+        (s = <t> * rest and
+         MAX_HEIGHT(s) = max(HEIGHT(t), MAX_HEIGHT(rest))
+
+this /= empty_tree
+there exists children: string of tree of T
+    (this = compose(root, children))
+this /= empty_tree
+there exists children: string of tree of T
+    (#this = compose(replaceRoot, children)  and
+     this = compose(x, children))
+height = HEIGHT(this)
+
+this /= empty_tree  and
+0 <= pos <= [number of children of this]
+
+this = [#this with subtree #st inserted at position pos]
+
+this /= empty_tree  and
+0 <= pos < [number of children of this]
+
+this =
+ [#this with subtree at position pos removed and returned as result]
+this /= empty_tree
+there exists root: T, children: string of tree of T
+    (this = compose(root, children)  and
+     numberOfSubtrees = |children|)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/Tree1.html:
+TREE_REP is  (
+  size: integer,
+  height: integer,
+  rootLabel: T,
+  subtrees: string of TREE_REP
+ )
+
+IS_LEGAL_REP (
+  tr: TREE_REP
+ ): boolean is
+ 0 <= tr.height <= tr.size  and
+ (if tr.size > 0 then
+  [tr.size = 1 + sum of the sizes of the TREE_REP in tr.subtrees]  and
+  [tr.height = 1 + max of the heights of the TREE_REP in tr.subtrees]  and
+  [tr.rootLabel is not null]  and
+  [tr.subtrees is not null]  and
+  STRING_IS_LEGAL_REP(tr.subtrees)
+ else
+  [tr.rootLabel is null]  and
+  [tr.subtrees is null])
+
+STRING_IS_LEGAL_REP (
+  s: string of TREE_REP
+ ): string of tree of T satisfies
+ if s = <> then
+  STRING_IS_LEGAL_REP(s) = true
+ else
+  there exists t: TREE_REP, rest: string of TREE_REP
+   (s = <t> * rest  and
+    [t is not null]  and
+    [t is not aliased to any of the TREE_REP in rest]  and
+    STRING_IS_LEGAL_REP(s) = IS_LEGAL_REP(t) and STRING_IS_LEGAL_REP(rest))
+
+ABSTRACT_TREE (
+  tr: TREE_REP
+ ): tree of T satisfies
+ if IS_LEGAL_REP(tr) then
+  (if tr.size = 0 then
+    ABSTRACT_TREE(tr) = empty_tree
+   else
+    ABSTRACT_TREE(tr) =
+     compose(tr.rootLabel, STRING_ABSTRACT_TREE(tr.subtrees)))
+
+STRING_ABSTRACT_TREE (
+  s: string of TREE_REP
+ ): string of tree of T satisfies
+ if STRING_IS_LEGAL_REP(s) then
+  (if s = <> then
+    STRING_ABSTRACT_TREE(s) = <>
+   else
+    there exists t: TREE_REP, rest: string of TREE_REP
+     (s = <t> * rest and
+      STRING_ABSTRACT_TREE(s) =
+       ABSTRACT_TREE(t) * STRING_ABSTRACT_TREE(rest)))
+
+IS_LEGAL_REP($this)
+this = ABSTRACT_TREE($this)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/TreeKernel.html:
+
+PRE_ORDER(
+  t: tree of T
+ ): string of T satisfies
+ if t = empty_tree
+  then PRE_ORDER(tree) = <>
+  else there exists root: T, children: string of tree of T
+        (t = compose(root, children) and
+         PRE_ORDER(t) = <root> * STRING_PRE_ORDER(children))
+
+STRING_PRE_ORDER(
+  s: string of tree of T
+ ): string of T satisfies
+ if s = empty_string
+  then STRING_PRE_ORDER(s) = <>
+  else there exists t: tree of T, rest: string of tree of T
+        (s = <t> * rest and
+         STRING_PRE_ORDER(s) = PRE_ORDER(t) * STRING_PRE_ORDER(rest))
+
+type TreeKernel is modeled by tree of T
+():
+ ensures
+  this = empty_tree
+~this.seen * ~this.unseen = PRE_ORDER(this)
+newSequenceOfTree = <>
+this = compose(root, #children)
+this /= empty_tree
+#this = compose(disassemble, children)
+size = |this|
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/TreeSecondary.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/FormatChecker.html:
+canParseInt = [the given String represents a valid integer]
+canParseLong = [the given String represents a valid integer]
+canParseDouble = [the given String represents a valid real]
+canParseBoolean = (s = "true") or (s = "false")
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/Reporter.html:
+[msg is printed to the console and the application terminates]
+[if the condition is false, msg is printed to the console and
+  the application terminates; otherwise it just returns]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/utilities/Tokenizer.html:
+in.is_open
+
+tokens =
+  [the non-whitespace tokens in #in.content] * <END_OF_INPUT>  and
+in.content = <>
+
+isKeyword = [s is a keyword in the BL language]
+isCondition = [s is a condition in the BL language]
+isIdentifier = [s is an identifier in the BL language]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-summary.html#skip-navbar-top:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-use.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-tree.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/index-files/index-1.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/help-doc.html#package:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-summary.html#package-description:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/package-summary.html#class-summary:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/search.html:
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/XMLTree.html:
+
+label = [the label of the root of this (not including <> for tags)]
+
+isTag = [the label of the root of this is a tag]
+[the label of the root of this is a tag]
+hasAttribute =
+  [label of the root of this has an attribute called name]
+[the label of the root of this is a tag and
+   it has an attribute called name]
+attributeValue =
+  [the value associated with attribute name of the root tag of this]
+[the label of the root of this is a tag]
+numberOfChildren = [the number of subtrees of the root of this]
+
+[the label of the root of this is a tag and
+     0 <= k < the number of subtrees of the root of this]
+
+child = [the k-th subtree of the root of this]
+[the label of the root of this is a tag]
+
+attributeNames =
+  [an Iterable<String> of the attribute names of the root of this]
+
+[this is displayed in a new window]
+[this is displayed in a new window]
+toString = [the XML string representation of this]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/XMLTree1.html:
+source is the name of a file or a URL
+this = [the XMLTree corresponding to the given input source,
+        with whitespace trimmed]
+source is the name of a file or a URL
+this = [the XMLTree corresponding to the given input source,
+        with whitespace trimmed only if trimWhitespace]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/XMLTree2.html:
+source is the name of a file or a URL
+this = [the XMLTree corresponding to the given input source,
+        with whitespace trimmed]
+source is the name of a file or a URL
+this = [the XMLTree corresponding to the given input source,
+        with whitespace trimmed only if trimWhitespace]
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/tree/Tree.html:
+
+HEIGHT(
+  t: tree of T
+ ): integer satisfies
+ if t = empty_tree
+  then HEIGHT(t) = 0
+  else there exists root: T, children: string of tree of T
+        (t = compose(root, children) and
+         HEIGHT(t) = 1 + MAX_HEIGHT(children))
+
+MAX_HEIGHT(
+  s: string of tree of T
+ ): integer satisfies
+ if s = empty_string
+  then MAX_HEIGHT(s) = 0
+  else there exists t: tree of T, rest: string of tree of T
+        (s = <t> * rest and
+         MAX_HEIGHT(s) = max(HEIGHT(t), MAX_HEIGHT(rest))
+
+this /= empty_tree
+there exists children: string of tree of T
+    (this = compose(root, children))
+this /= empty_tree
+there exists children: string of tree of T
+    (#this = compose(replaceRoot, children)  and
+     this = compose(x, children))
+height = HEIGHT(this)
+
+this /= empty_tree  and
+0 <= pos <= [number of children of this]
+
+this = [#this with subtree #st inserted at position pos]
+
+this /= empty_tree  and
+0 <= pos < [number of children of this]
+
+this =
+ [#this with subtree at position pos removed and returned as result]
+this /= empty_tree
+there exists root: T, children: string of tree of T
+    (this = compose(root, children)  and
+     numberOfSubtrees = |children|)
+
+Methods for https://cse22x1.engineering.osu.edu/common/doc/components/xmltree/XMLTreeSecondary.html:
+
